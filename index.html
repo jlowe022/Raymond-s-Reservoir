@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Raymond</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #1f1f1f;
+  --surface: #272727;
+  --surface-2: #2f2f2f;
+  --border: #333333;
+  --border-hover: #444;
+  --text: #e8e8e8;
+  --text-secondary: #999;
+  --text-faint: #555;
+  --accent: #c9a87c;
+  --accent-bg: rgba(201,168,124,0.1);
+  --tag-r: #3d2a2a; --tag-r-text: #e07b7b;
+  --tag-a: #2a3530; --tag-a-text: #6dbf94;
+  --tag-y: #2e2a1e; --tag-y-text: #d4a84b;
+  --tag-m: #1e2535; --tag-m-text: #6a9fd8;
+  --tag-o: #2d1f2d; --tag-o-text: #c47ed4;
+  --tag-n: #1e2d2a; --tag-n-text: #5cc4b0;
+  --tag-d: #2d2520; --tag-d-text: #d4885c;
+}
+
+html, body {
+  min-height: 100%;
+  background: var(--bg);
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* PAGE */
+.page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 56px 32px 100px;
+}
+
+/* TOP NAV BREADCRUMB */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-faint);
+  margin-bottom: 36px;
+}
+.breadcrumb span { color: var(--text-secondary); }
+
+/* PAGE HEADER */
+.page-header { margin-bottom: 36px; }
+
+.page-icon {
+  width: 52px;
+  height: 52px;
+  background: var(--surface-2);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+}
+
+.page-title {
+  font-family: 'Lora', serif;
+  font-size: clamp(32px, 6vw, 48px);
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+
+.page-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 300;
+  margin-bottom: 24px;
+}
+
+/* TOOLBAR */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 5px;
+  cursor: default;
+  font-family: 'Inter', sans-serif;
+}
+
+.view-btn {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  font-weight: 500;
+}
+
+.count-badge {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-faint);
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+/* GALLERY GRID */
+.gallery {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+/* CARD */
+.card {
+  background: var(--surface);
+  border: 1.5px solid rgba(255,255,255,0.5);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.card:hover {
+  border-color: rgba(255,255,255,0.85);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+}
+
+/* CARD COVER */
+.card-cover {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-cover-letter {
+  font-family: 'Lora', serif;
+  font-size: 56px;
+  font-weight: 600;
+  opacity: 0.9;
+  line-height: 1;
+  color: #fff;
+  user-select: none;
+}
+
+/* CARD BODY */
+.card-body {
+  padding: 14px 16px 16px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.letter-badge {
+  font-family: 'Lora', serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* PROPERTY ROWS */
+.props { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+
+.prop-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.prop-label {
+  color: var(--text-faint);
+  font-size: 11.5px;
+  min-width: 52px;
+  padding-top: 1px;
+  flex-shrink: 0;
+}
+
+.prop-tags { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+
+.tag {
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  line-height: 1.5;
+}
+
+/* MODAL OVERLAY */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(3px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* MODAL */
+.modal {
+  background: #252525;
+  border: 1px solid #383838;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: scale(0.96) translateY(8px);
+  transition: transform 0.2s ease;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+.overlay.active .modal {
+  transform: scale(1) translateY(0);
+}
+
+.modal-cover {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.modal-cover-letter {
+  font-family: 'Lora', serif;
+  font-size: 96px;
+  font-weight: 600;
+  opacity: 0.2;
+  color: #fff;
+  line-height: 1;
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: rgba(0,0,0,0.3);
+  border: none;
+  color: #fff;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  font-family: 'Inter', sans-serif;
+}
+
+.modal-body { padding: 24px 28px 32px; }
+
+.modal-letter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.modal-letter {
+  font-family: 'Lora', serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.modal-title {
+  font-family: 'Lora', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.3;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.modal-divider {
+  border: none;
+  border-top: 1px solid #333;
+  margin: 18px 0;
+}
+
+.modal-prop-section { margin-bottom: 18px; }
+
+.modal-prop-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 8px;
+}
+
+.modal-prop-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.modal-meaning-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 10px;
+}
+
+.modal-meaning {
+  font-size: 14.5px;
+  line-height: 1.85;
+  color: #c0c0c0;
+  font-weight: 300;
+}
+
+/* ADD CARD */
+.add-card {
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-faint);
+  min-height: 160px;
+  cursor: default;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.add-card:hover { border-color: var(--border-hover); color: var(--text-secondary); }
+
+@media (max-width: 540px) {
+  .page { padding: 36px 16px 80px; }
+  .gallery { grid-template-columns: 1fr; gap: 8px; }
+  .modal-body { padding: 18px 20px 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    My Pages › <span>Raymond</span>
+  </div>
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="page-icon">✦</div>
+    <h1 class="page-title">Raymond</h1>
+    <p class="page-subtitle">Seven letters. Seven truths. Written with love.</p>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <button class="toolbar-btn view-btn">⊞ &nbsp;Gallery</button>
+      <span class="count-badge">7 entries</span>
+    </div>
+    <div class="toolbar-left">
+      <button class="toolbar-btn">Filter</button>
+      <button class="toolbar-btn">Sort</button>
+    </div>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="gallery" id="gallery"></div>
+
+</div>
+
+<!-- MODAL OVERLAY -->
+<div class="overlay" id="overlay">
+  <div class="modal" id="modal">
+    <div class="modal-cover" id="modal-cover">
+      <div class="modal-cover-letter" id="modal-cover-letter"></div>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-letter-row">
+        <span class="modal-letter" id="modal-letter"></span>
+      </div>
+      <div class="modal-title" id="modal-title"></div>
+      <hr class="modal-divider"/>
+      <div class="modal-prop-section">
+        <div class="modal-prop-label">Words</div>
+        <div class="modal-prop-tags" id="modal-tags"></div>
+      </div>
+      <hr class="modal-divider"/>
+      <div class="modal-meaning-label">Personal Note</div>
+      <div class="modal-meaning" id="modal-meaning"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const colors = {
+  R: { cover: 'linear-gradient(135deg,#2a2a2a,#111111)', tag: { bg:'#333', text:'#e8e8e8' } },
+  A: { cover: 'linear-gradient(135deg,#383838,#1a1a1a)', tag: { bg:'#3a3a3a', text:'#d0d0d0' } },
+  Y: { cover: 'linear-gradient(135deg,#1e1e1e,#0d0d0d)', tag: { bg:'#2c2c2c', text:'#bbbbbb' } },
+  M: { cover: 'linear-gradient(135deg,#424242,#222222)', tag: { bg:'#404040', text:'#f0f0f0' } },
+  O: { cover: 'linear-gradient(135deg,#303030,#141414)', tag: { bg:'#363636', text:'#c8c8c8' } },
+  N: { cover: 'linear-gradient(135deg,#4a4a4a,#282828)', tag: { bg:'#484848', text:'#ffffff' } },
+  D: { cover: 'linear-gradient(135deg,#1a1a1a,#080808)', tag: { bg:'#252525', text:'#aaaaaa' } },
+};
+
+const data = [
+  { letter:"R", words:["Resilient"], meaning:"I constantly see you push to be better — not just when life is hard, but even when life is good. You always find a way and make a way. It's not about fighting through something dramatic; it's the quiet, steady perseverance you show every single day. That's a rare kind of strength." },
+  { letter:"A", words:["Admirable"], meaning:"I admire you. A lot. I look up to you, and I don't say that lightly. The way you carry yourself, the way you love people, the way you show up — it's something I genuinely aspire to. You're someone worth watching and worth following." },
+  { letter:"Y", words:["Yes","Yeomanly"], meaning:"You are one of the few people where you can just tell — your yes belongs to Christ. It shows in how you live, how you serve, how you treat people. That kind of quiet, lived-out faith is something I deeply value and deeply respect in you." },
+  { letter:"M", words:["Magnanimous","Masterful","Meticulous"], meaning:"It's not just in your area of expertise — it's in everything. You are so organized, so thorough, so intentional. You bring greatness to whatever you touch. And the way you do it with generosity and grace? That's what makes it magnanimous. You're just great at what you do." },
+  { letter:"O", words:["Original"], meaning:"I have never met anyone like you. Your brain is out of this world. The things you think of, the ideas you come up with — I genuinely ask myself, who would even think of that? You are one of a kind. Truly. There is no mold for you because you broke it." },
+  { letter:"N", words:["Noble","Nurturing"], meaning:"You are a stand-up man of integrity. Full stop. And what makes it even more beautiful is the nurturing side of you — you genuinely care about helping people become who God has called them to be. You don't just have character, you pour into other people's character too." },
+  { letter:"D", words:["Determined"], meaning:"You are determined. And honestly? That speaks for itself. When you set your mind to something, you don't waver. You don't quit. You just go. That kind of resolve is something to be celebrated — and something that has always inspired me about you." },
+];
+
+const gallery = document.getElementById('gallery');
+const overlay = document.getElementById('overlay');
+const modal = document.getElementById('modal');
+
+function openCard(d) {
+  const c = colors[d.letter];
+  document.getElementById('modal-cover').style.background = c.cover;
+  document.getElementById('modal-cover-letter').textContent = d.letter;
+  document.getElementById('modal-letter').textContent = d.letter;
+  document.getElementById('modal-title').textContent = d.words.join(' · ');
+  document.getElementById('modal-tags').innerHTML = d.words.map(w =>
+    `<span class="tag" style="background:${c.tag.bg};color:${c.tag.text}">${w}</span>`
+  ).join('');
+  document.getElementById('modal-meaning').textContent = d.meaning;
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  overlay.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modal-close').addEventListener('click', closeModal);
+overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+data.forEach(d => {
+  const c = colors[d.letter];
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  const pills = d.words.map(w =>
+    `<span class="tag" style="background:${c.tag.bg};color:${c.tag.text}">${w}</span>`
+  ).join('');
+
+  card.innerHTML = `
+    <div class="card-cover" style="background:${c.cover}">
+      <div class="card-cover-letter">${d.letter}</div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">
+        <span class="letter-badge">${d.letter}</span>
+        ${d.words[0]}${d.words.length > 1 ? ' +' + (d.words.length - 1) : ''}
+      </div>
+      <div class="props">
+        <div class="prop-row">
+          <span class="prop-label">Words</span>
+          <div class="prop-tags">${pills}</div>
+        </div>
+
+      </div>
+    </div>
+  `;
+
+  card.addEventListener('click', () => openCard(d));
+  gallery.appendChild(card);
+});
+
+// Add card placeholder
+const addCard = document.createElement('div');
+addCard.className = 'add-card';
+addCard.innerHTML = `<span style="font-size:18px">+</span> New`;
+gallery.appendChild(addCard);
+</script>
+</body>
+</html>
