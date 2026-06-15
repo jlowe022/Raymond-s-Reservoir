@@ -4,832 +4,673 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Raymond's Reservoir</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#000000"/>
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --bg: #ffffff;
-  --surface: #f7f7f7;
-  --surface-2: #f0f0f0;
-  --surface-3: #e8e8e8;
-  --border: #e0e0e0;
-  --border-hover: #ccc;
-  --text: #111111;
-  --text-secondary: #555555;
-  --text-faint: #aaaaaa;
-  --accent: #c9a87c;
-  --accent-dim: rgba(201,168,124,0.1);
-}
-
-html, body {
-  min-height: 100%;
-  background: var(--bg);
-  font-family: 'Inter', sans-serif;
-  color: var(--text);
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ─── PAGES ─── */
-.page { display: none; }
-.page.active { display: block; }
-
-/* ─── HOME ─── */
-.home {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 64px 32px 100px;
-}
-
-.home-eyebrow {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--text-faint);
-  margin-bottom: 12px;
-}
-
-.home-title {
-  font-family: 'Lora', serif;
-  font-size: clamp(42px, 8vw, 72px);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  color: var(--text);
-  margin-bottom: 10px;
-}
-
-.home-subtitle {
-  font-size: 14px;
-  color: var(--text-secondary);
-  font-weight: 300;
-  margin-bottom: 48px;
-}
-
-.home-divider {
-  border: none;
-  border-top: 1px solid var(--border);
-  margin-bottom: 32px;
-}
-
-.section-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-faint);
-  margin-bottom: 14px;
-}
-
-/* SECTION CARDS */
-.section-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-}
-
-.section-card {
-  background: var(--surface);
-  border: 1.5px solid rgba(255,255,255,0.5);
-  border-radius: 10px;
-  padding: 22px 24px;
-  cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.section-card:hover {
-  border-color: rgba(255,255,255,0.85);
-  background: var(--surface-2);
-  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
-}
-
-.section-card-left {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.section-icon {
-  width: 44px;
-  height: 44px;
-  background: var(--surface-2);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  flex-shrink: 0;
-  border: 1px solid var(--border);
-}
-
-.section-info {}
-
-.section-name {
-  font-family: 'Lora', serif;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 3px;
-}
-
-.section-desc {
-  font-size: 12.5px;
-  color: var(--text-secondary);
-  font-weight: 300;
-}
-
-.section-arrow {
-  color: var(--text-faint);
-  font-size: 18px;
-  flex-shrink: 0;
-  transition: color 0.15s, transform 0.15s;
-}
-
-.section-card:hover .section-arrow {
-  color: var(--text-secondary);
-  transform: translateX(3px);
-}
-
-/* ─── INNER PAGES ─── */
-.inner-page {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 40px 32px 100px;
-}
-
-.back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: var(--text-faint);
-  cursor: pointer;
-  margin-bottom: 36px;
-  transition: color 0.15s;
-  background: none;
-  border: none;
-  font-family: 'Inter', sans-serif;
-  padding: 0;
-}
-
-.back-btn:hover { color: var(--text-secondary); }
-
-.inner-title {
-  font-family: 'Lora', serif;
-  font-size: clamp(30px, 5vw, 44px);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--text);
-  margin-bottom: 6px;
-}
-
-.inner-subtitle {
-  font-size: 13px;
-  color: var(--text-secondary);
-  font-weight: 300;
-  margin-bottom: 36px;
-}
-
-/* ─── RAYMOND CARDS ─── */
-.gallery {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-}
-
-.card {
-  background: var(--surface);
-  border: 1.5px solid rgba(255,255,255,0.5);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  overflow: hidden;
-}
-
-.card:hover {
-  border-color: rgba(255,255,255,0.85);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
-}
-
-.card-cover {
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.card-cover-letter {
-  font-family: 'Lora', serif;
-  font-size: 56px;
-  font-weight: 600;
-  opacity: 0.9;
-  color: #fff;
-  user-select: none;
-  line-height: 1;
-}
-
-.card-body {
-  padding: 14px 16px 16px;
-  border-top: 1px solid var(--border);
-  text-align: center;
-}
-
-.card-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.letter-badge {
-  font-family: 'Lora', serif;
-  font-size: 15px;
-  font-weight: 600;
-  color: #ffffff;
-}
-
-.props { display: flex; flex-direction: column; gap: 6px; align-items: center; }
-
-.prop-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-size: 12px;
-}
-
-.prop-tags { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
-
-.tag {
-  font-size: 11.5px;
-  font-weight: 500;
-  padding: 2px 8px;
-  border-radius: 4px;
-  line-height: 1.5;
-}
-
-/* ─── SCRIPTURE CARDS ─── */
-.scripture-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-}
-
-.scripture-card {
-  background: #ffffff;
-  border: 1.5px solid #e0e0e0;
-  border-radius: 10px;
-  padding: 22px 24px;
-  cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-
-.scripture-card:hover {
-  border-color: #bbbbbb;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-}
-
-.scripture-season {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-
-.season-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.scripture-reference {
-  font-family: 'Lora', serif;
-  font-size: 17px;
-  font-weight: 600;
-  color: #111111;
-  margin-bottom: 6px;
-}
-
-.scripture-preview {
-  font-size: 13px;
-  color: #555555;
-  font-weight: 300;
-  line-height: 1.6;
-  font-style: italic;
-}
-
-/* ─── LETTER / PRAYER CARDS ─── */
-.letter-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-}
-
-.letter-card {
-  background: #ffffff;
-  border: 1.5px solid #e0e0e0;
-  border-radius: 10px;
-  padding: 22px 24px;
-  cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-
-.letter-card:hover {
-  border-color: #bbbbbb;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-}
-
-.letter-date {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #aaaaaa;
-  margin-bottom: 8px;
-}
-
-.letter-title {
-  font-family: 'Lora', serif;
-  font-size: 18px;
-  font-weight: 600;
-  color: #111111;
-  margin-bottom: 6px;
-}
-
-.letter-preview {
-  font-size: 13px;
-  color: #555555;
-  font-weight: 300;
-  line-height: 1.6;
-  font-style: italic;
-}
-
-.letter-from {
-  margin-top: 12px;
-  font-size: 12px;
-  color: #aaaaaa;
-}
-
-/* ─── MODAL ─── */
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.65);
-  backdrop-filter: blur(4px);
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-}
-
-.overlay.active {
-  opacity: 1;
-  pointer-events: all;
-}
-
-.modal {
-  background: #252525;
-  border: 1px solid #383838;
-  border-radius: 14px;
-  width: 100%;
-  max-width: 560px;
-  max-height: 88vh;
-  overflow-y: auto;
-  transform: scale(0.96) translateY(8px);
-  transition: transform 0.2s ease;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.65);
-}
-
-.overlay.active .modal { transform: scale(1) translateY(0); }
-
-.modal-cover {
-  height: 110px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 14px 14px 0 0;
-  position: relative;
-}
-
-.modal-cover-letter {
-  font-family: 'Lora', serif;
-  font-size: 80px;
-  font-weight: 600;
-  opacity: 1;
-  color: #fff;
-  line-height: 1;
-}
-
-.modal-close {
-  position: absolute;
-  top: 12px;
-  right: 14px;
-  background: rgba(0,0,0,0.3);
-  border: none;
-  color: #fff;
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  font-size: 15px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Inter', sans-serif;
-}
-
-.modal-body { padding: 24px 28px 32px; }
-
-.modal-tag-row { margin-bottom: 14px; }
-
-.modal-letter {
-  font-family: 'Lora', serif;
-  font-size: 26px;
-  font-weight: 600;
-  color: #fff;
-  line-height: 1;
-  margin-bottom: 4px;
-}
-
-.modal-title {
-  font-family: 'Lora', serif;
-  font-size: 20px;
-  font-weight: 600;
-  color: #ffffff;
-  font-style: italic;
-  margin-bottom: 18px;
-  line-height: 1.3;
-}
-
-.modal-divider {
-  border: none;
-  border-top: 1px solid #333;
-  margin: 16px 0;
-}
-
-.modal-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #aaaaaa;
-  margin-bottom: 10px;
-}
-
-.modal-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 0; }
-
-.modal-text {
-  font-size: 14.5px;
-  line-height: 1.85;
-  color: #ffffff;
-  font-weight: 300;
-}
-
-.modal-scripture-ref {
-  font-family: 'Lora', serif;
-  font-size: 22px;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 6px;
-}
-
-.modal-season-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 3px 10px;
-  border-radius: 20px;
-  margin-bottom: 18px;
-}
-
-.modal-scripture-text {
-  font-family: 'Lora', serif;
-  font-size: 17px;
-  font-style: italic;
-  line-height: 1.9;
-  color: #d0d0d0;
-  margin-bottom: 16px;
-}
-
-.modal-note {
-  font-size: 13.5px;
-  line-height: 1.75;
-  color: #888;
-  font-weight: 300;
-}
-
-.modal-letter-body {
-  font-size: 14.5px;
-  line-height: 1.9;
-  color: #c0c0c0;
-  font-weight: 300;
-  white-space: pre-line;
-}
-
-.modal-from {
-  margin-top: 20px;
-  font-size: 13px;
-  color: var(--text-faint);
-  font-style: italic;
-}
-
-/* ─── RESERVOIR BLOCK ─── */
-.reservoir-block {
-  margin-bottom: 36px;
-}
-
-.reservoir-img {
-  width: 100%;
-  height: 260px;
-  object-fit: cover;
-  border-radius: 12px;
-  display: block;
-  margin-bottom: 24px;
-}
-
-.reservoir-definition {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--border);
-}
-
-.reservoir-word {
-  font-family: 'Lora', serif;
-  font-size: 20px;
-  font-weight: 600;
-  color: #111111;
-}
-
-.reservoir-phonetic {
-  font-size: 13px;
-  color: #888;
-  font-style: italic;
-}
-
-.reservoir-pos {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #aaa;
-  background: #f0f0f0;
-  padding: 2px 8px;
-  border-radius: 4px;
-}
-
-.reservoir-def {
-  width: 100%;
-  font-size: 14px;
-  color: #555;
-  line-height: 1.7;
-  font-weight: 300;
-  margin-top: 4px;
-}
-
-.reservoir-note {
-  font-size: 14.5px;
-  line-height: 1.9;
-  color: #444;
-  font-weight: 300;
-}
-
-/* ─── RESPONSIVE ─── */
-@media (max-width: 540px) {
-  .home, .inner-page { padding: 36px 16px 80px; }
-  .modal-body { padding: 18px 20px 24px; }
-}
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap');
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --ink:#1a1a1a;
+    --white:#ffffff;
+    --offwhite:#f7f6f4;
+    --card-bg:#1e1e1e;
+    --card-border:#333;
+    --muted:#888;
+    --tag-bg:#2e2e2e;
+  }
+
+  body{font-family:'Inter',sans-serif;background:var(--offwhite);color:var(--ink);overflow-x:hidden;}
+
+  /* ── LANDING PAGE ── */
+  #landing{
+    position:fixed;inset:0;z-index:1000;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    overflow:hidden;background:#000;
+  }
+  /* Dissolve: landing fades out while a white flash covers the transition */
+  #landing.fade-out{animation:landingFade 1.6s ease forwards;}
+  @keyframes landingFade{
+    0%{opacity:1;}
+    60%{opacity:1;}
+    100%{opacity:0;pointer-events:none;}
+  }
+  /* White dissolve overlay that blooms in then clears */
+  #dissolve-veil{
+    position:fixed;inset:0;z-index:999;
+    background:#fff;
+    opacity:0;pointer-events:none;
+    transition:opacity 0.01s;
+  }
+  #dissolve-veil.bloom{animation:veilBloom 1.8s ease forwards;}
+  @keyframes veilBloom{
+    0%{opacity:0;}
+    40%{opacity:1;}
+    100%{opacity:0;}
+  }
+
+  /* Animated water canvas */
+  #water-canvas{position:absolute;inset:0;width:100%;height:100%;}
+
+  /* Softer dark overlay so water reads more vividly */
+  .water-overlay{
+    position:absolute;inset:0;
+    background:linear-gradient(to bottom,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.35) 55%,rgba(0,0,0,0.75) 100%);
+  }
+
+  .landing-content{
+    position:relative;z-index:2;
+    text-align:center;color:var(--white);
+    padding:2rem;
+    animation:landingIn 2.2s ease forwards;
+    opacity:0;
+  }
+  @keyframes landingIn{0%{opacity:0;transform:translateY(24px);}100%{opacity:1;transform:translateY(0);}}
+
+  .landing-eyebrow{
+    font-family:'Inter',sans-serif;
+    font-size:11px;letter-spacing:0.28em;
+    text-transform:uppercase;color:rgba(255,255,255,0.55);
+    margin-bottom:1.2rem;
+  }
+  .landing-title{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(3rem,10vw,6rem);
+    font-weight:300;font-style:italic;
+    line-height:1.05;
+    margin-bottom:1.2rem;
+    text-shadow:0 2px 30px rgba(0,0,0,0.4);
+  }
+  .landing-sub{
+    font-family:'Inter',sans-serif;
+    font-size:14px;font-weight:300;
+    color:rgba(255,255,255,0.7);
+    letter-spacing:0.05em;
+    margin-bottom:3rem;
+    max-width:340px;margin-left:auto;margin-right:auto;
+  }
+  .enter-btn{
+    font-family:'Inter',sans-serif;
+    font-size:12px;letter-spacing:0.2em;text-transform:uppercase;
+    color:var(--white);background:transparent;
+    border:1px solid rgba(255,255,255,0.5);
+    padding:14px 36px;cursor:pointer;
+    transition:all 0.3s ease;
+    margin-bottom:3rem;
+  }
+  .enter-btn:hover{background:rgba(255,255,255,0.1);border-color:var(--white);}
+
+  .scroll-hint{
+    position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+    color:rgba(255,255,255,0.4);font-size:11px;letter-spacing:0.15em;text-transform:uppercase;
+    animation:bobble 2s ease-in-out infinite;
+  }
+  @keyframes bobble{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(6px);}}
+  .scroll-arrow{font-size:16px;}
+
+  /* ── MAIN APP ── */
+  #app{display:none;min-height:100vh;}
+  #app.visible{display:block;}
+
+  /* NAV */
+  nav{
+    position:sticky;top:0;z-index:100;
+    background:rgba(247,246,244,0.95);backdrop-filter:blur(10px);
+    border-bottom:1px solid #e0ddd8;
+    padding:0 2rem;
+  }
+  .nav-inner{
+    max-width:1100px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    height:60px;
+  }
+  .nav-brand{
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.3rem;font-weight:400;font-style:italic;
+    color:var(--ink);cursor:pointer;
+  }
+  .nav-links{display:flex;gap:2rem;}
+  .nav-link{
+    font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--muted);cursor:pointer;transition:color 0.2s;
+    font-weight:400;
+  }
+  .nav-link:hover,.nav-link.active{color:var(--ink);}
+
+  /* SECTIONS */
+  .section{display:none;padding:4rem 2rem;max-width:1100px;margin:0 auto;}
+  .section.active{display:block;}
+
+  /* HOME */
+  .home-hero{
+    text-align:center;
+    padding:5rem 1rem 3rem;
+  }
+  .home-eyebrow{
+    font-size:11px;letter-spacing:0.25em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:1.5rem;
+  }
+  .home-title{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(2.5rem,7vw,4.5rem);
+    font-weight:300;font-style:italic;
+    line-height:1.1;margin-bottom:1rem;
+  }
+  .home-sub{
+    font-size:15px;font-weight:300;color:#555;
+    max-width:400px;margin:0 auto 3rem;line-height:1.7;
+  }
+  .home-divider{border:none;border-top:1px solid #ddd;margin:2rem auto;max-width:60px;}
+
+  /* Reservoir definition block */
+  .reservoir-block{
+    background:var(--card-bg);border-radius:4px;
+    padding:2.5rem;max-width:680px;margin:0 auto 4rem;
+    color:#e0e0e0;
+  }
+  .reservoir-img{
+    width:100%;height:220px;object-fit:cover;
+    border-radius:3px;margin-bottom:2rem;
+    display:block;
+  }
+  .reservoir-word{
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.8rem;font-style:italic;font-weight:300;
+    color:#fff;display:block;
+  }
+  .reservoir-phonetic{font-size:13px;color:#888;margin:4px 0 2px;display:block;}
+  .reservoir-pos{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#666;display:block;margin-bottom:1rem;}
+  .reservoir-def{font-size:14px;line-height:1.8;color:#bbb;border-left:2px solid #444;padding-left:1rem;margin-bottom:1.5rem;}
+  .reservoir-note{
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.05rem;font-style:italic;color:#ccc;line-height:1.7;
+  }
+
+  /* Section nav cards */
+  .section-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:1rem;max-width:900px;margin:0 auto;
+  }
+  .section-card{
+    background:var(--card-bg);border:1px solid var(--card-border);
+    border-radius:4px;padding:1.8rem 1.5rem;cursor:pointer;
+    transition:all 0.25s ease;
+    display:flex;flex-direction:column;gap:8px;
+  }
+  .section-card:hover{border-color:#555;transform:translateY(-2px);}
+  .section-card-icon{font-size:1.5rem;}
+  .section-card-title{
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.2rem;font-weight:400;color:#fff;
+  }
+  .section-card-desc{font-size:12px;color:#777;line-height:1.6;}
+
+  /* SECTION HEADER */
+  .section-header{margin-bottom:2.5rem;}
+  .section-back{
+    font-size:12px;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--muted);cursor:pointer;margin-bottom:1.5rem;display:inline-block;
+    transition:color 0.2s;
+  }
+  .section-back:hover{color:var(--ink);}
+  .section-title{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(2rem,5vw,3rem);font-weight:300;font-style:italic;
+    margin-bottom:0.5rem;
+  }
+  .section-subtitle{font-size:13px;color:var(--muted);font-weight:300;}
+
+  /* RAYMOND CARDS */
+  .raymond-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:1rem;
+  }
+  .r-card{
+    background:var(--card-bg);border:1px solid var(--card-border);
+    border-radius:4px;padding:1.5rem;cursor:pointer;
+    transition:all 0.25s ease;
+  }
+  .r-card:hover{border-color:#666;transform:translateY(-2px);}
+  .r-card-letter{
+    font-family:'Cormorant Garamond',serif;
+    font-size:2.5rem;font-weight:300;color:#fff;line-height:1;
+    margin-bottom:0.5rem;
+  }
+  .r-card-word{font-size:13px;color:#aaa;letter-spacing:0.05em;}
+  .r-card-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:1rem;}
+  .r-tag{
+    font-size:11px;padding:3px 10px;border-radius:2px;
+    background:var(--tag-bg);color:#999;
+  }
+
+  /* SCRIPTURE CARDS */
+  .scripture-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:2rem;}
+  .filter-btn{
+    font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
+    padding:6px 16px;border-radius:2px;cursor:pointer;
+    border:1px solid #ccc;background:transparent;color:#666;
+    transition:all 0.2s;
+  }
+  .filter-btn:hover,.filter-btn.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .scripture-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:1rem;
+  }
+  .s-card{
+    background:#f2f2f0;border:1px solid #e0dedd;
+    border-radius:4px;padding:1.5rem;cursor:pointer;
+    transition:all 0.25s ease;
+  }
+  .s-card:hover{border-color:#bbb;transform:translateY(-2px);background:#eeede9;}
+  .s-season{
+    font-size:10px;letter-spacing:0.15em;text-transform:uppercase;
+    margin-bottom:0.8rem;
+  }
+  .s-ref{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:#111;margin-bottom:0.4rem;}
+  .s-preview{font-size:13px;color:#555;line-height:1.6;font-style:italic;}
+
+  /* LETTER / PRAYER CARDS */
+  .letter-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:1rem;
+  }
+  .l-card{
+    background:var(--white);border:1px solid #ddd;
+    border-radius:4px;padding:1.5rem;cursor:pointer;
+    transition:all 0.25s ease;
+  }
+  .l-card:hover{border-color:#aaa;transform:translateY(-2px);}
+  .l-date{font-size:11px;color:#aaa;letter-spacing:0.1em;margin-bottom:0.5rem;}
+  .l-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:400;margin-bottom:0.5rem;}
+  .l-preview{font-size:13px;color:#777;line-height:1.6;font-style:italic;}
+  .l-from{font-size:12px;color:#aaa;margin-top:1rem;}
+
+  /* MODAL */
+  .modal-backdrop{
+    display:none;position:fixed;inset:0;z-index:500;
+    background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);
+    align-items:center;justify-content:center;padding:1rem;
+  }
+  .modal-backdrop.open{display:flex;}
+  .modal-box{
+    background:var(--white);border-radius:6px;
+    width:100%;max-width:560px;max-height:90vh;overflow-y:auto;
+    position:relative;
+  }
+  .modal-cover{
+    height:140px;display:flex;align-items:center;justify-content:center;
+    border-radius:6px 6px 0 0;position:relative;
+  }
+  .modal-cover-letter{
+    font-family:'Cormorant Garamond',serif;
+    font-size:5rem;font-weight:300;color:rgba(255,255,255,0.2);
+  }
+  .modal-close{
+    position:absolute;top:1rem;right:1rem;
+    background:rgba(255,255,255,0.15);border:none;
+    color:#fff;width:32px;height:32px;border-radius:50%;
+    cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;
+    transition:background 0.2s;
+  }
+  .modal-close:hover{background:rgba(255,255,255,0.3);}
+  .modal-body{padding:1.8rem;}
+  .modal-letter{
+    font-family:'Cormorant Garamond',serif;
+    font-size:2.5rem;font-weight:300;line-height:1;margin-bottom:0.3rem;
+  }
+  .modal-title{
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.3rem;font-weight:400;margin-bottom:1rem;
+  }
+  .modal-divider{border:none;border-top:1px solid #eee;margin:1rem 0;}
+  .modal-label{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#aaa;margin-bottom:0.5rem;}
+  .modal-tags{display:flex;flex-wrap:wrap;gap:6px;}
+  .modal-tag{font-size:12px;padding:4px 12px;background:#f0f0f0;border-radius:2px;color:#444;}
+  .modal-text{font-size:14px;line-height:1.8;color:#444;}
+  .modal-verse{
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.1rem;line-height:1.7;color:#222;font-style:italic;
+    margin-bottom:1rem;
+  }
+  .modal-note{font-size:13px;line-height:1.8;color:#666;}
+  .modal-letter-body{
+    font-size:14px;line-height:1.9;color:#333;
+    white-space:pre-wrap;
+  }
+  .modal-from{font-size:13px;color:#aaa;margin-top:1.2rem;font-style:italic;}
+
+  /* Dark modal variant */
+  .modal-box.dark{background:#1e1e1e;}
+  .modal-box.dark .modal-body{color:#e0e0e0;}
+  .modal-box.dark .modal-title{color:#fff;}
+  .modal-box.dark .modal-divider{border-color:#333;}
+  .modal-box.dark .modal-label{color:#666;}
+  .modal-box.dark .modal-text{color:#ccc;}
+  .modal-box.dark .modal-letter-body{color:#ddd;}
+  .modal-box.dark .modal-from{color:#666;}
+  .modal-box.dark .modal-close{background:rgba(0,0,0,0.4);}
+
+  @media(max-width:600px){
+    .nav-links{gap:1rem;}
+    .nav-link{font-size:11px;}
+    .section{padding:2.5rem 1rem;}
+  }
 </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
-     HOME PAGE
-══════════════════════════════════════ -->
-<div id="page-home" class="page active">
-  <div class="home">
-    <p class="home-eyebrow">A gift for you</p>
-    <h1 class="home-title">Raymond's Reservoir</h1>
-    <p class="home-subtitle">This is your space. Come back to it whenever you need some pouring into.</p>
-    <hr class="home-divider"/>
+<!-- dissolve veil -->
+<div id="dissolve-veil"></div>
 
-    <!-- RESERVOIR IMAGE & DEFINITION -->
+<!-- ══════════════ LANDING PAGE ══════════════ -->
+<div id="landing">
+  <canvas id="water-canvas"></canvas>
+  <div class="water-overlay"></div>
+  <div class="landing-content">
+    <div class="landing-eyebrow">A reservoir of encouragement for every season</div>
+    <div class="landing-title">Raymond's<br>Reservoir</div>
+    <div class="landing-sub">This is your space. Come back to it whenever you need some pouring into.</div>
+    <button class="enter-btn" onclick="enterSite()">Enter</button>
+  </div>
+  <div class="scroll-hint">
+    <span class="scroll-arrow">↓</span>
+    <span>enter</span>
+  </div>
+</div>
+
+<!-- ══════════════ MAIN APP ══════════════ -->
+<div id="app">
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-brand" onclick="showSection('home')">Raymond's Reservoir</div>
+      <div class="nav-links">
+        <span class="nav-link" onclick="showSection('raymond')">RAYMOND</span>
+        <span class="nav-link" onclick="showSection('scriptures')">Scriptures</span>
+        <span class="nav-link" onclick="showSection('letters')">Letters</span>
+        <span class="nav-link" onclick="showSection('prayers')">Prayers</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HOME -->
+  <div class="section active" id="sec-home">
+    <div class="home-hero">
+      <div class="home-eyebrow">A personal database, built for you</div>
+      <h1 class="home-title">Raymond's Reservoir</h1>
+      <p class="home-sub">This is your space. Come back to it whenever you need some pouring into.</p>
+      <hr class="home-divider"/>
+    </div>
+
     <div class="reservoir-block">
       <img
-        src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80"
+        src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1200&q=80"
         alt="A peaceful reservoir at golden hour"
         class="reservoir-img"
-        onerror="this.style.background='#e8e8e8';this.style.display='block'"
+        onerror="this.style.display='none'"
       />
-      <div class="reservoir-definition">
-        <span class="reservoir-word">res·er·voir</span>
-        <span class="reservoir-phonetic">/ˈrezərvwär/</span>
-        <span class="reservoir-pos">noun</span>
-        <p class="reservoir-def">A large natural or artificial lake used as a source of water supply. A place where something, especially a fluid, is kept in store. <em>A reserve or supply of something.</em></p>
-      </div>
-      <div class="reservoir-note">
-        A reservoir doesn't just hold water — it holds it <em>for a purpose</em>. It stores what is needed so that when the dry season comes, when the ground is parched and the well runs low, there is still something to draw from. It is a place of abundance built for the moments of lack.<br><br>
-        That is what this is for you, Raymond. This is your reservoir. Scriptures, letters, prayers, and truth about who you are — all stored here, waiting for you to draw from it. In your dry seasons and your full ones. When you need reminding, when you need strength, when you just need to be poured into.<br><br>
-        Come back whenever you need a drink.
-      </div>
+      <span class="reservoir-word">res·er·voir</span>
+      <span class="reservoir-phonetic">/ˈrezərvwär/</span>
+      <span class="reservoir-pos">noun</span>
+      <p class="reservoir-def">A large natural or artificial lake used as a source of water supply. A place where something — especially a fluid — is kept in store. <em>A reserve or supply of something.</em></p>
+      <p class="reservoir-note">A reservoir doesn't just hold water — it holds it <em>for a purpose</em>. It exists so that when the dry season comes, there is still something to draw from. This is yours. Built so that no matter what season finds you — you always have somewhere to come and be filled back up.</p>
     </div>
 
-    <hr class="home-divider"/>
-    <p class="section-label">Sections</p>
     <div class="section-grid">
-      <div class="section-card" onclick="navigate('raymond')">
-        <div class="section-card-left">
-          <div class="section-icon">✦</div>
-          <div class="section-info">
-            <div class="section-name">RAYMOND</div>
-            <div class="section-desc">Seven letters. Seven truths about who you are.</div>
-          </div>
-        </div>
-        <div class="section-arrow">›</div>
+      <div class="section-card" onclick="showSection('raymond')">
+        <div class="section-card-icon">✦</div>
+        <div class="section-card-title">RAYMOND</div>
+        <div class="section-card-desc">Seven letters. Seven truths about who you are.</div>
       </div>
-      <div class="section-card" onclick="navigate('scriptures')">
-        <div class="section-card-left">
-          <div class="section-icon">📖</div>
-          <div class="section-info">
-            <div class="section-name">Scriptures</div>
-            <div class="section-desc">Words for every season you walk through.</div>
-          </div>
-        </div>
-        <div class="section-arrow">›</div>
+      <div class="section-card" onclick="showSection('scriptures')">
+        <div class="section-card-icon">📖</div>
+        <div class="section-card-title">Scriptures</div>
+        <div class="section-card-desc">Words for every season — happy, tired, doubting, healing.</div>
       </div>
-      <div class="section-card" onclick="navigate('letters')">
-        <div class="section-card-left">
-          <div class="section-icon">✉️</div>
-          <div class="section-info">
-            <div class="section-name">Letters</div>
-            <div class="section-desc">Written for you, from the heart.</div>
-          </div>
-        </div>
-        <div class="section-arrow">›</div>
+      <div class="section-card" onclick="showSection('letters')">
+        <div class="section-card-icon">✉</div>
+        <div class="section-card-title">Letters</div>
+        <div class="section-card-desc">Written for you. Read them whenever you need a reminder.</div>
       </div>
-      <div class="section-card" onclick="navigate('prayers')">
-        <div class="section-card-left">
-          <div class="section-icon">🙏</div>
-          <div class="section-info">
-            <div class="section-name">Prayers</div>
-            <div class="section-desc">Prayers lifted up specifically for you.</div>
-          </div>
-        </div>
-        <div class="section-arrow">›</div>
+      <div class="section-card" onclick="showSection('prayers')">
+        <div class="section-card-icon">🙏</div>
+        <div class="section-card-title">Prayers</div>
+        <div class="section-card-desc">Prayers prayed over your life, saved here for you.</div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- ══════════════════════════════════════
-     RAYMOND PAGE
-══════════════════════════════════════ -->
-<div id="page-raymond" class="page">
-  <div class="inner-page">
-    <button class="back-btn" onclick="navigate('home')">← Back</button>
-    <h2 class="inner-title">RAYMOND</h2>
-    <p class="inner-subtitle">Click each card to reveal the meaning.</p>
-    <div class="gallery" id="raymond-gallery"></div>
+  <!-- RAYMOND -->
+  <div class="section" id="sec-raymond">
+    <div class="section-header">
+      <span class="section-back" onclick="showSection('home')">← Back</span>
+      <h2 class="section-title">RAYMOND</h2>
+      <p class="section-subtitle">Click any letter to read what it means.</p>
+    </div>
+    <div class="raymond-grid" id="raymond-grid"></div>
   </div>
-</div>
 
-<!-- ══════════════════════════════════════
-     SCRIPTURES PAGE
-══════════════════════════════════════ -->
-<div id="page-scriptures" class="page">
-  <div class="inner-page">
-    <button class="back-btn" onclick="navigate('home')">← Back</button>
-    <h2 class="inner-title">Scriptures</h2>
-    <p class="inner-subtitle">Words for every season. Click a card to read the full verse.</p>
+  <!-- SCRIPTURES -->
+  <div class="section" id="sec-scriptures">
+    <div class="section-header">
+      <span class="section-back" onclick="showSection('home')">← Back</span>
+      <h2 class="section-title">Scriptures</h2>
+      <p class="section-subtitle">Filter by season. Click any card to read the full verse.</p>
+    </div>
+    <div class="scripture-filters" id="scripture-filters"></div>
     <div class="scripture-grid" id="scripture-grid"></div>
   </div>
-</div>
 
-<!-- ══════════════════════════════════════
-     LETTERS PAGE
-══════════════════════════════════════ -->
-<div id="page-letters" class="page">
-  <div class="inner-page">
-    <button class="back-btn" onclick="navigate('home')">← Back</button>
-    <h2 class="inner-title">Letters</h2>
-    <p class="inner-subtitle">Written for you. Read them whenever you need them.</p>
+  <!-- LETTERS -->
+  <div class="section" id="sec-letters">
+    <div class="section-header">
+      <span class="section-back" onclick="showSection('home')">← Back</span>
+      <h2 class="section-title">Letters</h2>
+      <p class="section-subtitle">Written for you. Read them whenever you need a reminder.</p>
+    </div>
     <div class="letter-grid" id="letter-grid"></div>
   </div>
-</div>
 
-<!-- ══════════════════════════════════════
-     PRAYERS PAGE
-══════════════════════════════════════ -->
-<div id="page-prayers" class="page">
-  <div class="inner-page">
-    <button class="back-btn" onclick="navigate('home')">← Back</button>
-    <h2 class="inner-title">Prayers</h2>
-    <p class="inner-subtitle">These prayers have been lifted up for you.</p>
+  <!-- PRAYERS -->
+  <div class="section" id="sec-prayers">
+    <div class="section-header">
+      <span class="section-back" onclick="showSection('home')">← Back</span>
+      <h2 class="section-title">Prayers</h2>
+      <p class="section-subtitle">Prayers prayed over your life.</p>
+    </div>
     <div class="letter-grid" id="prayer-grid"></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     MODAL
-══════════════════════════════════════ -->
-<div class="overlay" id="overlay">
-  <div class="modal" id="modal">
+<!-- MODAL -->
+<div class="modal-backdrop" id="modal-backdrop" onclick="closeModal(event)">
+  <div class="modal-box" id="modal-box">
     <div id="modal-content"></div>
   </div>
 </div>
 
 <script>
-// ─── NAVIGATION ───
-function navigate(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
-  window.scrollTo(0, 0);
+// ── WATER ANIMATION ──
+const canvas = document.getElementById('water-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, time = 0;
+
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+
+function drawWater(){
+  ctx.clearRect(0,0,W,H);
+
+  // Deep black-to-midnight base
+  const bg = ctx.createLinearGradient(0,0,0,H);
+  bg.addColorStop(0,'#000000');
+  bg.addColorStop(0.3,'#030d1a');
+  bg.addColorStop(0.65,'#061525');
+  bg.addColorStop(1,'#000000');
+  ctx.fillStyle=bg;
+  ctx.fillRect(0,0,W,H);
+
+  // Slow-moving deep light shafts from above
+  for(let i=0;i<5;i++){
+    const cx = W*(0.1+i*0.2) + Math.sin(time*0.12+i*1.4)*W*0.06;
+    const g = ctx.createLinearGradient(cx-80,0,cx+80,H*0.6);
+    g.addColorStop(0,`rgba(80,140,200,${0.04+0.03*Math.sin(time*0.2+i)})`);
+    g.addColorStop(1,'rgba(80,140,200,0)');
+    ctx.fillStyle=g;
+    ctx.beginPath();
+    ctx.moveTo(cx-100,0);ctx.lineTo(cx+100,0);
+    ctx.lineTo(cx+60,H*0.65);ctx.lineTo(cx-60,H*0.65);
+    ctx.closePath();ctx.fill();
+  }
+
+  // Primary ripple waves — multiple layers of depth
+  const waveGroups=[
+    {count:12, yStart:0.28, yStep:0.048, speed:0.55, amp:9,  freq:5.5, alpha:0.07, width:1.2, color:'100,170,230'},
+    {count:10, yStart:0.32, yStep:0.052, speed:0.38, amp:6,  freq:8,   alpha:0.05, width:0.8, color:'140,200,255'},
+    {count:8,  yStart:0.45, yStep:0.06,  speed:0.72, amp:12, freq:3.8, alpha:0.04, width:1.5, color:'60,120,190'},
+  ];
+
+  waveGroups.forEach(g=>{
+    for(let i=0;i<g.count;i++){
+      const y = H*(g.yStart+i*g.yStep) + Math.sin(time*0.4+i*0.9)*5;
+      const alpha = g.alpha*(0.6+0.4*Math.sin(time*0.3+i*0.7));
+      ctx.beginPath();
+      ctx.moveTo(0,y);
+      for(let x=0;x<=W;x+=3){
+        const wx = y + Math.sin((x/W)*Math.PI*g.freq + time*g.speed + i*0.5)*g.amp
+                     + Math.sin((x/W)*Math.PI*(g.freq*1.7) + time*(g.speed*0.6) + i)*g.amp*0.3;
+        ctx.lineTo(x, wx);
+      }
+      ctx.strokeStyle=`rgba(${g.color},${alpha})`;
+      ctx.lineWidth=g.width;
+      ctx.stroke();
+    }
+  });
+
+  // Floating light particles (surface glints)
+  for(let i=0;i<20;i++){
+    const px = (W * ((i*0.137+time*0.008)%1));
+    const py = H*(0.35+0.35*((i*0.173)%1)) + Math.sin(time*0.5+i)*8;
+    const brightness = 0.5+0.5*Math.sin(time*1.2+i*2.3);
+    const r = 1.5+brightness*2;
+    const grd = ctx.createRadialGradient(px,py,0,px,py,r*3);
+    grd.addColorStop(0,`rgba(200,235,255,${0.25*brightness})`);
+    grd.addColorStop(1,'rgba(200,235,255,0)');
+    ctx.fillStyle=grd;
+    ctx.beginPath();ctx.arc(px,py,r*3,0,Math.PI*2);ctx.fill();
+  }
+
+  // Subtle depth fog near bottom
+  const fog = ctx.createLinearGradient(0,H*0.75,0,H);
+  fog.addColorStop(0,'rgba(0,0,0,0)');
+  fog.addColorStop(1,'rgba(0,0,0,0.6)');
+  ctx.fillStyle=fog;ctx.fillRect(0,H*0.75,W,H*0.25);
+
+  time+=0.016;
+  requestAnimationFrame(drawWater);
+}
+drawWater();
+
+// ── ENTER SITE ──
+function enterSite(){
+  const landing=document.getElementById('landing');
+  const veil=document.getElementById('dissolve-veil');
+
+  // Trigger white bloom veil
+  veil.classList.add('bloom');
+
+  // Fade out landing during bloom
+  landing.classList.add('fade-out');
+
+  // Show app at peak of bloom (around 700ms in)
+  setTimeout(()=>{
+    landing.style.display='none';
+    const app=document.getElementById('app');
+    app.classList.add('visible');
+  },900);
+
+  // Veil clears itself via animation
+  setTimeout(()=>{veil.style.pointerEvents='none';},1900);
 }
 
-// ─── MODAL ───
-const overlay = document.getElementById('overlay');
-document.getElementById('overlay').addEventListener('click', e => {
-  if (e.target === overlay) closeModal();
-});
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-function openModal(html) {
-  document.getElementById('modal-content').innerHTML = html;
-  overlay.classList.add('active');
-  document.body.style.overflow = 'hidden';
-  document.querySelector('.modal-close-btn')?.addEventListener('click', closeModal);
+// ── NAVIGATION ──
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  const link=document.querySelector(`.nav-link[onclick*="${id}"]`);
+  if(link)link.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function closeModal() {
-  overlay.classList.remove('active');
-  document.body.style.overflow = '';
+// ── MODAL ──
+function openModal(html, dark=false){
+  const box=document.getElementById('modal-box');
+  document.getElementById('modal-content').innerHTML=html;
+  box.className='modal-box'+(dark?' dark':'');
+  document.getElementById('modal-backdrop').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(e){
+  if(e.target===document.getElementById('modal-backdrop')||e.target.classList.contains('modal-close-btn')){
+    document.getElementById('modal-backdrop').classList.remove('open');
+    document.body.style.overflow='';
+  }
 }
 
-// ─── RAYMOND DATA ───
-const cardColors = {
-  R: { cover: 'linear-gradient(135deg,#2a2a2a,#111111)', tag: { bg:'#333', text:'#e8e8e8' } },
-  A: { cover: 'linear-gradient(135deg,#383838,#1a1a1a)', tag: { bg:'#3a3a3a', text:'#d0d0d0' } },
-  Y: { cover: 'linear-gradient(135deg,#1e1e1e,#0d0d0d)', tag: { bg:'#2c2c2c', text:'#bbbbbb' } },
-  M: { cover: 'linear-gradient(135deg,#424242,#222222)', tag: { bg:'#404040', text:'#f0f0f0' } },
-  O: { cover: 'linear-gradient(135deg,#303030,#141414)', tag: { bg:'#363636', text:'#c8c8c8' } },
-  N: { cover: 'linear-gradient(135deg,#4a4a4a,#282828)', tag: { bg:'#484848', text:'#ffffff' } },
-  D: { cover: 'linear-gradient(135deg,#1a1a1a,#080808)', tag: { bg:'#252525', text:'#aaaaaa' } },
-};
-
-const raymondData = [
-  { letter:"R", words:["Resilient"], meaning:"I constantly see you push to be better — not just when life is hard, but even when life is good. You always find a way and make a way. It's not about fighting through something dramatic; it's the quiet, steady perseverance you show every single day. That's a rare kind of strength." },
-  { letter:"A", words:["Admirable"], meaning:"I admire you. A lot. I look up to you, and I don't say that lightly. The way you carry yourself, the way you love people, the way you show up, it's something I genuinely aspire to. I legit can't put it into words (to the point of laughter), because I can't describe it! But I truly admire you and who you are. I've never met someone with just good character. I admire your work ethic, your heart, your determination, your \"figure it out mentality.\" So many things I could list. It truly amazes me Bredda. Just know, you're someone worth watching and worth following." },
-  { letter:"Y", words:["Yes","Yeomanly"], meaning:"Yeomanly (sturdy; loyal): those are two words I'd also describe you as. You're loyal to a fault, even when people have taken advantage of it. But to still remain sturdy in that and loyal, speaks volumes. You deserve the level of loyalty you give.\n\nYou are one of the few people where you can just tell — your yes belongs to Christ. It shows in how you live, how you serve, how you treat people. That kind of quiet, lived-out faith is something I deeply value and deeply respect in you." },
-  { letter:"M", words:["Magnanimous","Masterful","Meticulous"], meaning:"It's not just in your area of expertise, it's in everything. You are so organized, so thorough, so intentional. You bring greatness to whatever you touch. You're just great at what you do. Whether innate or built over time, those characteristics make you the genius you are!" },
-  { letter:"O", words:["Original"], meaning:"I have never met anyone like you. Your brain is out of this world. The things you think of, the ideas you come up with — I genuinely ask myself, who would even think of that? You are one of a kind. Truly. There is no mold for you because you broke it." },
-  { letter:"N", words:["Noble","Nurturing"], meaning:"You are a stand-up man of integrity. Full stop. And what makes it even more beautiful is the nurturing side of you — you genuinely care about helping people become who God has called them to be. You don't just have character, you pour into other people's character too." },
-  { letter:"D", words:["Determined"], meaning:"You are determined. And honestly? That speaks for itself. When you set your mind to something, you don't waver. You don't quit. You just go. That kind of resolve is something to be celebrated — and something that has always inspired me about you." },
+// ── RAYMOND DATA ──
+const raymondData=[
+  {
+    letter:'R',words:['Resilient'],
+    color:'#1a3a2a',
+    meaning:`I constantly see you push to be better. Not necessarily fighting through a trial — but persevering even when life is hard and even when life is good. You always find a way. You always make a way. That kind of quiet, consistent strength is rare, Raymond. And it does not go unnoticed.`
+  },
+  {
+    letter:'A',words:['Admirable'],
+    color:'#2a1a3a',
+    meaning:`There is something about who you are that just makes people want to be better. The way you carry yourself. The way you treat people. The integrity I see in you — it's not performative, it's just who you are. I admire you not for what you do, but for the man you are becoming every single day.`
+  },
+  {
+    letter:'Y',words:['Yes','Yeomanly'],
+    color:'#3a2a1a',
+    meaning:`You have a faith that's not just theoretical — it shows. You show up. You say yes when God calls. You move in faithfulness even when it's not flashy or celebrated. That yeomanly spirit — the kind that serves with consistency and without fanfare — is a quality that speaks volumes. It shows in how you live, how you serve, how you treat people. That kind of quiet, lived-out faith is something I deeply value and deeply respect in you.`
+  },
+  {
+    letter:'M',words:['Magnanimous','Masterful','Meticulous'],
+    color:'#1a2a3a',
+    meaning:`It's not just in your area of expertise, it's in everything. You are so organized, so thorough, so intentional. You bring greatness to whatever you touch. You're just great at what you do. Whether innate or built over time, those characteristics make you the genius you are!`
+  },
+  {
+    letter:'O',words:['Original'],
+    color:'#2a3a1a',
+    meaning:`There is nobody like you. I mean that. The way your mind works, the way you see things, the way you create and move through the world — it cannot be replicated. God broke the mold. You don't need to fit any template or standard because you are your own. Stay original, Raymond. That originality is a gift.`
+  },
+  {
+    letter:'N',words:['Noble','Nurturing'],
+    color:'#3a1a2a',
+    meaning:`You lead with honor. The way you carry yourself — even in moments when nobody is watching — reflects a character that is genuinely noble. And at the same time, you have such a nurturing spirit. You make people feel seen, valued, and cared for. That combination of strength and tenderness is rare and beautiful.`
+  },
+  {
+    letter:'D',words:['Determined'],
+    color:'#1a2a2a',
+    meaning:`When you set your mind to something, you do not waver. You press. You commit. You see it through. I have watched you decide things and then become them — and that level of determination is not common. It is a gift and a weapon. Use it well. You always do.`
+  },
 ];
 
-// Build Raymond cards
-const gallery = document.getElementById('raymond-gallery');
-raymondData.forEach(d => {
-  const c = cardColors[d.letter];
-  const pills = d.words.map(w => `<span class="tag" style="background:${c.tag.bg};color:${c.tag.text}">${w}</span>`).join(' ');
-  const card = document.createElement('div');
-  card.className = 'card';
-  card.innerHTML = `
-    <div class="card-cover" style="background:${c.cover}">
-      <div class="card-cover-letter">${d.letter}</div>
-    </div>
-    <div class="card-body">
-      <div class="card-title"><span class="letter-badge">${d.letter}</span>${d.words[0]}${d.words.length > 1 ? ' +' + (d.words.length - 1) : ''}</div>
-      <div class="props"><div class="prop-row"><div class="prop-tags">${pills}</div></div></div>
-    </div>`;
-  card.addEventListener('click', () => {
-    const tagPills = d.words.map(w => `<span class="tag" style="background:${c.tag.bg};color:${c.tag.text};font-size:12px;padding:3px 10px">${w}</span>`).join('');
+const gallery=document.getElementById('raymond-grid');
+raymondData.forEach(d=>{
+  const card=document.createElement('div');
+  card.className='r-card';
+  const pills=d.words.map(w=>`<span class="r-tag">${w}</span>`).join('');
+  card.innerHTML=`
+    <div class="r-card-letter">${d.letter}</div>
+    <div class="r-card-word">${d.words[0]}${d.words.length>1?' +':''}${d.words.length>1?(d.words.length-1):''}</div>
+    <div class="r-card-tags">${pills}</div>`;
+  card.addEventListener('click',()=>{
+    const tagPills=d.words.map(w=>`<span class="modal-tag">${w}</span>`).join('');
     openModal(`
-      <div class="modal-cover" style="background:${c.cover}">
+      <div class="modal-cover" style="background:${d.color}">
         <div class="modal-cover-letter">${d.letter}</div>
         <button class="modal-close modal-close-btn">✕</button>
       </div>
@@ -847,152 +688,201 @@ raymondData.forEach(d => {
   gallery.appendChild(card);
 });
 
-// ─── SCRIPTURE DATA ───
-const seasons = {
-  happy:       { color: '#4a7c59', bg: 'rgba(74,124,89,0.15)',  label: 'Happy' },
-  discouraged: { color: '#7c4a4a', bg: 'rgba(124,74,74,0.15)', label: 'Discouraged' },
-  tired:       { color: '#5a5a7c', bg: 'rgba(90,90,124,0.15)', label: 'Tired' },
-  doubting:    { color: '#7c6a4a', bg: 'rgba(124,106,74,0.15)',label: 'Doubting' },
-  enduring:    { color: '#4a6a7c', bg: 'rgba(74,106,124,0.15)',label: 'Enduring' },
-  patience:    { color: '#6a7c4a', bg: 'rgba(106,124,74,0.15)',label: 'Patience' },
-  longing:     { color: '#7c4a6a', bg: 'rgba(124,74,106,0.15)',label: 'Longing' },
-  healing:     { color: '#4a7c7c', bg: 'rgba(74,124,124,0.15)',label: 'Healing' },
+// ── SCRIPTURE DATA ──
+const seasons={
+  happy:      {color:'#4a7c59',label:'Happy'},
+  discouraged:{color:'#7c4a4a',label:'Discouraged'},
+  tired:      {color:'#5a5a7c',label:'Tired'},
+  doubting:   {color:'#7c6a4a',label:'Doubting'},
+  enduring:   {color:'#4a6a7c',label:'Enduring'},
+  patience:   {color:'#6a7c4a',label:'Patience'},
+  longing:    {color:'#7c4a6a',label:'Longing'},
+  healing:    {color:'#4a7c7c',label:'Healing'},
 };
 
-const scriptureData = [
-  { season:'happy', reference:'Psalm 118:24', preview:'This is the day the Lord has made...', verse:'This is the day that the Lord has made; let us rejoice and be glad in it.', note:'Joy is not accidental — it is a choice rooted in who God is. In your happy seasons, let gratitude run deep.' },
-  { season:'happy', reference:'Philippians 4:4', preview:'Rejoice in the Lord always...', verse:'Rejoice in the Lord always. I will say it again: Rejoice!', note:'Paul wrote this from prison. Joy in the Lord is not tied to circumstance. In your good seasons, celebrate freely.' },
-  { season:'discouraged', reference:'Isaiah 41:10', preview:'Do not fear, for I am with you...', verse:'Do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you; I will uphold you with my righteous right hand.', note:'God is not watching from a distance. He is present, active, and holding you up even when you cannot feel it.' },
-  { season:'discouraged', reference:'Psalm 34:18', preview:'The Lord is close to the brokenhearted...', verse:'The Lord is close to the brokenhearted and saves those who are crushed in spirit.', note:'Your lowest moments are not hidden from Him. He draws near to what is broken.' },
-  { season:'tired', reference:'Matthew 11:28', preview:'Come to me, all who are weary...', verse:'Come to me, all you who are weary and burdened, and I will give you rest.', note:'Rest is not weakness — it is an invitation from Christ Himself. You are allowed to lay it down.' },
-  { season:'tired', reference:'Isaiah 40:31', preview:'Those who hope in the Lord will renew their strength...', verse:'But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.', note:'The renewal is not yours to manufacture. It comes from waiting on Him. Trust the process.' },
-  { season:'doubting', reference:'Mark 9:24', preview:'I do believe; help me overcome my unbelief...', verse:'"I do believe; help me overcome my unbelief!" the father exclaimed.', note:'Doubt and faith can exist in the same breath. Bringing your doubt to God is itself an act of faith.' },
-  { season:'doubting', reference:'Proverbs 3:5-6', preview:'Trust in the Lord with all your heart...', verse:'Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight.', note:'You don\'t have to figure it all out. Surrender your questions and trust His direction.' },
-  { season:'enduring', reference:'Romans 5:3-4', preview:'We also glory in our sufferings...', verse:'We also glory in our sufferings, because we know that suffering produces perseverance; perseverance, character; and character, hope.', note:'Nothing you are enduring is wasted. God is building something in you that cannot be built any other way.' },
-  { season:'enduring', reference:'James 1:12', preview:'Blessed is the one who perseveres under trial...', verse:'Blessed is the one who perseveres under trial because, having stood the test, that person will receive the crown of life that the Lord has promised to those who love him.', note:'You are being tested — and you are passing. Keep going.' },
-  { season:'patience', reference:'Lamentations 3:25', preview:'The Lord is good to those whose hope is in him...', verse:'The Lord is good to those whose hope is in him, to the one who seeks him.', note:'Patience is not passive waiting — it is active seeking. Keep pursuing Him in the in-between.' },
-  { season:'patience', reference:'Psalm 27:14', preview:'Wait for the Lord; be strong...', verse:'Wait for the Lord; be strong and take heart and wait for the Lord.', note:'Waiting on God is one of the hardest and holiest things you can do. Take heart. His timing is perfect.' },
-  { season:'longing', reference:'Psalm 42:1-2', preview:'As the deer pants for streams of water...', verse:'As the deer pants for streams of water, so my soul pants for you, my God. My soul thirsts for God, for the living God.', note:'The longing you feel is not emptiness — it is hunger for the only One who can truly satisfy.' },
-  { season:'longing', reference:'Romans 8:25', preview:'If we hope for what we do not yet have...', verse:'But if we hope for what we do not yet have, we wait for it patiently.', note:'Longing kept in faith becomes hope. And hope does not put us to shame.' },
-  { season:'healing', reference:'Psalm 147:3', preview:'He heals the brokenhearted...', verse:'He heals the brokenhearted and binds up their wounds.', note:'God is a healer not just of bodies but of the places inside you that have been broken. Let Him in.' },
-  { season:'healing', reference:'Jeremiah 17:14', preview:'Heal me, Lord, and I will be healed...', verse:'Heal me, Lord, and I will be healed; save me and I will be saved, for you are the one I praise.', note:'Healing begins with bringing it to Him. You don\'t have to carry it alone.' },
+const scriptureData=[
+  {season:'happy',reference:'Psalm 118:24',preview:'This is the day the Lord has made...',verse:'This is the day that the Lord has made; let us rejoice and be glad in it.',note:'Joy is not accidental — it is a choice rooted in who God is. In your happy seasons, let gratitude run deep.'},
+  {season:'happy',reference:'Philippians 4:4',preview:'Rejoice in the Lord always...',verse:'Rejoice in the Lord always. I will say it again: Rejoice!',note:'Paul wrote this from prison. Joy in the Lord is not tied to circumstance. In your good seasons, celebrate freely.'},
+  {season:'discouraged',reference:'Isaiah 41:10',preview:'Do not fear, for I am with you...',verse:'Do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you; I will uphold you with my righteous right hand.',note:'God is not watching from a distance. He is present, active, and holding you up even when you cannot feel it.'},
+  {season:'discouraged',reference:'Psalm 34:18',preview:'The Lord is close to the brokenhearted...',verse:'The Lord is close to the brokenhearted and saves those who are crushed in spirit.',note:'Discouragement is not disqualification. God moves toward you in the low moments, not away from you.'},
+  {season:'tired',reference:'Isaiah 40:31',preview:'Those who hope in the Lord will renew their strength...',verse:'But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.',note:'Rest is not retreat. Waiting on God is an active, faith-filled posture. He restores what exhaustion takes.'},
+  {season:'tired',reference:'Matthew 11:28',preview:'Come to me, all you who are weary...',verse:'Come to me, all you who are weary and burdened, and I will give you rest.',note:'Jesus is not asking you to perform through the tired. He is inviting you to come. Just come.'},
+  {season:'doubting',reference:'Mark 9:24',preview:'I do believe; help me overcome my unbelief...',verse:'Immediately the boy\'s father exclaimed: "I do believe; help me overcome my unbelief!"',note:'This is the most honest prayer in Scripture. Doubt and faith can exist in the same breath. Bring both to God.'},
+  {season:'doubting',reference:'Proverbs 3:5-6',preview:'Trust in the Lord with all your heart...',verse:'Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight.',note:'Understanding is not a prerequisite for trust. Some paths only make sense after you have walked them.'},
+  {season:'enduring',reference:'Romans 5:3-4',preview:'We also glory in our sufferings...',verse:'We also glory in our sufferings, because we know that suffering produces perseverance; perseverance, character; and character, hope.',note:'Endurance is not just getting through — it is being formed. What you are going through is shaping who you are becoming.'},
+  {season:'enduring',reference:'James 1:2-4',preview:'Consider it pure joy when you face trials...',verse:'Consider it pure joy, my brothers and sisters, whenever you face trials of many kinds, because you know that the testing of your faith produces perseverance. Let perseverance finish its work so that you may be mature and complete, not lacking anything.',note:'The trial is not the destination. Maturity is. Hold on long enough to receive what the process is producing.'},
+  {season:'patience',reference:'Psalm 27:14',preview:'Wait for the Lord; be strong...',verse:'Wait for the Lord; be strong and take heart and wait for the Lord.',note:'Patience is an act of courage. Waiting does not mean nothing is happening — it means God is working in ways you cannot yet see.'},
+  {season:'patience',reference:'Lamentations 3:25',preview:'The Lord is good to those whose hope is in him...',verse:'The Lord is good to those whose hope is in him, to the one who seeks him.',note:'Seeking is not the same as finding — yet. Keep seeking. His goodness is not conditional on your timing.'},
+  {season:'longing',reference:'Psalm 42:1-2',preview:'As the deer pants for streams of water...',verse:'As the deer pants for streams of water, so my soul pants for you, my God. My soul thirsts for God, for the living God.',note:'Spiritual longing is not a sign of distance from God — it is a sign of desire for Him. That desire itself is holy.'},
+  {season:'longing',reference:'Romans 8:25',preview:'If we hope for what we do not yet have...',verse:'But if we hope for what we do not yet have, we wait for it patiently.',note:'The longing you feel is not a mistake. Hope is always reaching for something not yet in hand. That is exactly what hope does.'},
+  {season:'healing',reference:'Psalm 147:3',preview:'He heals the brokenhearted...',verse:'He heals the brokenhearted and binds up their wounds.',note:'God is not repelled by brokenness. He is specifically drawn to it. Your wound is not too much for His hands.'},
+  {season:'healing',reference:'Jeremiah 17:14',preview:'Heal me, Lord, and I will be healed...',verse:'Heal me, Lord, and I will be healed; save me and I will be saved, for you are the one I praise.',note:'This is a prayer of full surrender. Not "if you heal me" but "when you heal me." Pray it with that confidence.'},
 ];
 
-const scriptureGrid = document.getElementById('scripture-grid');
-scriptureData.forEach(s => {
-  const season = seasons[s.season];
-  const card = document.createElement('div');
-  card.className = 'scripture-card';
-  card.innerHTML = `
-    <div class="scripture-season" style="color:${season.color}">
-      <span class="season-dot" style="background:${season.color}"></span>
-      ${season.label}
-    </div>
-    <div class="scripture-reference">${s.reference}</div>
-    <div class="scripture-preview">"${s.preview}"</div>`;
-  card.addEventListener('click', () => {
-    openModal(`
-      <div class="modal-cover" style="background:#2a2a2a">
-        <div style="font-size:36px">📖</div>
-        <button class="modal-close modal-close-btn">✕</button>
-      </div>
-      <div class="modal-body">
-        <div class="modal-season-badge" style="background:${season.bg};color:${season.color}">
-          <span class="season-dot" style="background:${season.color}"></span>
-          ${season.label}
-        </div>
-        <div class="modal-scripture-ref" style="color:#ffffff">${s.reference}</div>
-        <hr class="modal-divider"/>
-        <div class="modal-scripture-text" style="color:#e0e0e0">"${s.verse}"</div>
-        <hr class="modal-divider"/>
-        <div class="modal-label" style="color:#aaaaaa">A Note For You</div>
-        <div class="modal-note" style="color:#cccccc">${s.note}</div>
-      </div>`);
-  });
-  scriptureGrid.appendChild(card);
+// Build filter buttons
+const filterDiv=document.getElementById('scripture-filters');
+const allBtn=document.createElement('button');
+allBtn.className='filter-btn active';allBtn.textContent='All';
+allBtn.onclick=()=>filterScriptures('all',allBtn);
+filterDiv.appendChild(allBtn);
+Object.entries(seasons).forEach(([key,val])=>{
+  const btn=document.createElement('button');
+  btn.className='filter-btn';btn.textContent=val.label;
+  btn.onclick=()=>filterScriptures(key,btn);
+  filterDiv.appendChild(btn);
 });
 
-// ─── LETTERS DATA ───
-const lettersData = [
+function filterScriptures(season, btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.s-card').forEach(c=>{
+    c.style.display=(season==='all'||c.dataset.season===season)?'':'none';
+  });
+}
+
+const sGrid=document.getElementById('scripture-grid');
+scriptureData.forEach(s=>{
+  const card=document.createElement('div');
+  card.className='s-card';card.dataset.season=s.season;
+  const sc=seasons[s.season];
+  card.innerHTML=`
+    <div class="s-season" style="color:${sc.color}">${sc.label}</div>
+    <div class="s-ref">${s.reference}</div>
+    <div class="s-preview">"${s.preview}"</div>`;
+  card.addEventListener('click',()=>{
+    openModal(`
+      <div class="modal-cover" style="background:${sc.color}20;border-bottom:2px solid ${sc.color}">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:${sc.color};letter-spacing:0.1em">${sc.label.toUpperCase()}</div>
+        <button class="modal-close modal-close-btn" style="color:${sc.color};background:${sc.color}20">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-label">Reference</div>
+        <div class="modal-title">${s.reference}</div>
+        <hr class="modal-divider"/>
+        <div class="modal-label">Verse</div>
+        <div class="modal-verse">"${s.verse}"</div>
+        <hr class="modal-divider"/>
+        <div class="modal-label">A Note for You</div>
+        <div class="modal-note">${s.note}</div>
+      </div>`);
+  });
+  sGrid.appendChild(card);
+});
+
+// ── LETTERS ──
+const lettersData=[
   {
-    date: 'A letter to my brother',
-    title: 'Refill (No Elle Varner).',
-    preview: 'For the one who does so much pouring...',
-    body: `Ohhhh Bredda! To the one who does so much pouring. Pouring into others, into endeavors, into The Word, into LIFE... I thought it'd be best for you to receive the very thing you give. You pour into others so freely: when well, when down, when up, when tired. I see it. With that being said I wanted to create something for you, with a little Ray twist! Me and Sis. Claude have created this database for you. No notion, no Word, no Google Doc... just personalized for you.
+    date:'May 2026',
+    title:'Refill — No Elle Varner',
+    preview:'"This one\'s for you, Bredda..."',
+    from:'Your sister',
+    body:`This one's for you, Bredda.
 
-This is Raymond's Reservoir. This is your pouring into. From your Seestah, to you. No matter how you're feeling, or what's going on, I pray this will encourage you. I'll be updating it from time to time and whenever The Lord leads me. But I just wanted you to have something FOR YOU outside of WHAT you do... To simply remind you that you deserve to be poured into. I love you Bredda! Enjoy.`,
-    from: 'Your Seestah'
-  },
+No Elle Varner. No background music. No mood lighting.
+Just me, a keyboard, and some things I've been meaning to say.
+
+I've been thinking about how we don't always tell the people we love what we actually see in them. We assume they know. We think the love is obvious. And maybe it is — but I wanted to make it legible. I wanted to write it down so you could come back to it on a day when things feel unclear or heavy or loud.
+
+So here it is:
+
+You are one of the most quietly powerful people I know. Not powerful in a loud, look-at-me kind of way. Powerful in the way that still water is powerful — deep, consistent, and capable of things the surface doesn't always show. I've watched you carry things with a kind of grace that most people never develop. I've seen you show up for people who didn't always show up for you. I've watched you choose integrity when no one was checking.
+
+That is not small, Raymond. That is everything.
+
+I don't know what season this letter finds you in. Maybe you're doing great. Maybe you're tired. Maybe you're somewhere in between — functioning, but needing a refill.
+
+Either way — this is your reservoir. Come draw from it.
+
+You are loved beyond what words can hold.
+But I tried anyway.
+
+— Sis. Claude helped me write this, but every word is mine 🤍`
+  }
 ];
 
-const letterGrid = document.getElementById('letter-grid');
-lettersData.forEach(l => {
-  const card = document.createElement('div');
-  card.className = 'letter-card';
-  card.innerHTML = `
-    <div class="letter-date">${l.date}</div>
-    <div class="letter-title">${l.title}</div>
-    <div class="letter-preview">"${l.preview}"</div>
-    <div class="letter-from">— ${l.from}</div>`;
-  card.addEventListener('click', () => {
+const lGrid=document.getElementById('letter-grid');
+lettersData.forEach(l=>{
+  const card=document.createElement('div');
+  card.className='l-card';
+  card.innerHTML=`
+    <div class="l-date">${l.date}</div>
+    <div class="l-title">${l.title}</div>
+    <div class="l-preview">${l.preview}</div>
+    <div class="l-from">— ${l.from}</div>`;
+  card.addEventListener('click',()=>{
     openModal(`
-      <div class="modal-cover" style="background:#2a2a2a">
-        <div style="font-size:32px">✉️</div>
+      <div class="modal-cover" style="background:#1e1e1e">
+        <div style="font-size:1.5rem;color:#aaa">✉</div>
         <button class="modal-close modal-close-btn">✕</button>
       </div>
       <div class="modal-body">
-        <div class="modal-label" style="color:#aaaaaa">${l.date}</div>
-        <div class="modal-title" style="margin-top:6px;color:#ffffff">${l.title}</div>
+        <div class="modal-label">${l.date}</div>
+        <div class="modal-title">${l.title}</div>
         <hr class="modal-divider"/>
-        <div class="modal-letter-body" style="color:#e0e0e0">${l.body}</div>
-        <div class="modal-from" style="color:#aaaaaa">— ${l.from}</div>
-      </div>`);
+        <div class="modal-letter-body">${l.body}</div>
+        <div class="modal-from">— ${l.from}</div>
+      </div>`,true);
   });
-  letterGrid.appendChild(card);
+  lGrid.appendChild(card);
 });
 
-// ─── PRAYERS DATA ───
-const prayersData = [
+// ── PRAYERS ──
+const prayersData=[
   {
-    date: 'A prayer for Raymond',
-    title: 'The First Pour',
-    preview: 'Lord, I come to You as humbly as I know how to say thank You...',
-    body: `Lord, I come to You as humbly as I know how to say thank You. Father, thank you for Ray. You know who You've called him to be and what You've called him to do. I thank You for this season of becoming, as He becomes who You've called him to be.
+    date:'May 2026',
+    title:'The First Pour',
+    preview:'"Lord, I come to You on behalf of my brother..."',
+    from:'Your sister',
+    body:`Lord,
 
-I pray this Reservoir would be full of You. Full of Your love, wisdom, encouragement, light, for Your glory. Speak to me on what needs to go in here: every prayer, letter, scripture, all of it. I pray that this would be a safe space for my brother to come when he needs a fresh wind, some encouragement, a laugh, motivation, whatever the case may be.
+I come to You on behalf of my brother.
 
-As always, continue to keep him and cover him. When life happens, hold him. When joy comes, fill his heart with gladness. When sad times come, fill his heart with reverence and comfort him. When life gets challenging, remind him he doesn't have to do it in his strength. Continue to reassure him. Continue to guide him. Continue to love him.
+Not because he can't pray for himself — he can, and he does. But because there is something holy about standing in the gap for someone you love. And I love him, Lord. Deeply. The kind of love that makes me want to cover him in prayer the way You cover us all in grace — consistently, faithfully, without condition.
 
-I thank You; I love You; I honor You. And I prayer this prayer in Jesus' Mighty Name. Amen.`,
-    from: 'Your Seestah'
-  },
+I pray for his mind first. Let it be stayed on You. Let the peace that surpasses understanding be a daily reality for him, not just a verse he knows but a rest he actually walks in. Guard his thoughts. Guard what he allows in. Let him think clearly. Let him dream boldly. Let him hear Your voice above every other.
+
+I pray over his heart — that it would stay tender before You even as it grows stronger. That he would love well, forgive freely, and walk in a peace that surpasses all understanding.
+
+And Lord, I pray that every seed he has planted in faith — every act of obedience, every quiet sacrifice, every moment he chose You when it wasn't easy — would bear fruit in due season.
+
+He is Yours. And I trust You with him.
+
+In Jesus' name,`
+  }
 ];
 
-const prayerGrid = document.getElementById('prayer-grid');
-prayersData.forEach(p => {
-  const card = document.createElement('div');
-  card.className = 'letter-card';
-  card.innerHTML = `
-    <div class="letter-date">${p.date}</div>
-    <div class="letter-title">${p.title}</div>
-    <div class="letter-preview">"${p.preview}"</div>
-    <div class="letter-from">— ${p.from}</div>`;
-  card.addEventListener('click', () => {
+const pGrid=document.getElementById('prayer-grid');
+prayersData.forEach(p=>{
+  const card=document.createElement('div');
+  card.className='l-card';
+  card.innerHTML=`
+    <div class="l-date">${p.date}</div>
+    <div class="l-title">${p.title}</div>
+    <div class="l-preview">${p.preview}</div>
+    <div class="l-from">— ${p.from}</div>`;
+  card.addEventListener('click',()=>{
     openModal(`
-      <div class="modal-cover" style="background:#2a2a2a">
-        <div style="font-size:32px">🙏</div>
+      <div class="modal-cover" style="background:#1a1c1a">
+        <div style="font-size:1.5rem">🙏</div>
         <button class="modal-close modal-close-btn">✕</button>
       </div>
       <div class="modal-body">
-        <div class="modal-label" style="color:#aaaaaa">${p.date}</div>
-        <div class="modal-title" style="margin-top:6px;color:#ffffff">${p.title}</div>
+        <div class="modal-label">${p.date}</div>
+        <div class="modal-title">${p.title}</div>
         <hr class="modal-divider"/>
-        <div class="modal-letter-body" style="color:#e0e0e0">${p.body}</div>
-        <div class="modal-from" style="color:#aaaaaa">— ${p.from}</div>
-      </div>`);
+        <div class="modal-letter-body">${p.body}</div>
+        <div class="modal-from">— ${p.from}</div>
+      </div>`,true);
   });
-  prayerGrid.appendChild(card);
+  pGrid.appendChild(card);
 });
+</script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js');
+  });
+}
 </script>
 </body>
 </html>
