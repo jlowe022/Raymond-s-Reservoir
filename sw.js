@@ -1,4 +1,4 @@
-const CACHE_NAME = 'reservoir-v4';
+const CACHE_NAME = 'reservoir-v5';
 
 self.addEventListener('install', e => {
   self.skipWaiting();

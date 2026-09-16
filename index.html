@@ -340,6 +340,7 @@
     white-space:pre-wrap;
   }
   .modal-from{font-size:13px;color:#aaa;margin-top:1.2rem;font-style:italic;}
+  .modal-letter-video{width:100%;border-radius:8px;margin-bottom:1.2rem;display:block;background:#000;}
 
   /* Dark modal variant */
   .modal-box.dark{background:#1e1e1e;}
@@ -772,6 +773,14 @@ scriptureData.forEach(s=>{
 // ── LETTERS ──
 const lettersData=[
   {
+    date:'September 7, 2026',
+    title:'Your Golden Year',
+    preview:'A letter for this season — watch this one, Bredda.',
+    from:'Your sister',
+    video:'https://www.dropbox.com/scl/fi/pr26bqnwwgga7jio8724f/R37.mov?rlkey=zbvbw65ckecjt0wd8ua75j9tw&st=elix4vji&raw=1',
+    body:''
+  },
+  {
     date:'May 2026',
     title:'Refill — No Elle Varner',
     preview:'"This one\'s for you, Bredda..."',
@@ -889,7 +898,8 @@ lettersData.forEach(l=>{
         <div class="modal-label">${l.date}</div>
         <div class="modal-title">${l.title}</div>
         <hr class="modal-divider"/>
-        <div class="modal-letter-body">${l.body}</div>
+        ${l.video?`<video class="modal-letter-video" src="${l.video}" controls playsinline></video>`:''}
+        ${l.body?`<div class="modal-letter-body">${l.body}</div>`:''}
         <div class="modal-from">— ${l.from}</div>
       </div>`,true);
   });
